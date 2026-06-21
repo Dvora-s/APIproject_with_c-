@@ -1,0 +1,41 @@
+# ===== Build output (per project requirements - must NOT be committed) =====
+[Bb]in/
+[Oo]bj/
+
+# ===== Visual Studio =====
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ===== Rider / VS Code =====
+.idea/
+.vscode/
+
+# ===== Local DB files (mdf/ldf) - environment specific, not part of source =====
+DB/*.mdf
+DB/*.ldf
+DB/*.mdf-shm
+DB/*.mdf-wal
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== NuGet =====
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+# ===== Secrets =====
+appsettings.*.local.json
+*.pfx
+
+# ===== OS noise =====
+.DS_Store
+Thumbs.db
+
+# ===== Misc =====
+*.cache
+*.tmp

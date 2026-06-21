@@ -1,0 +1,251 @@
+{
+  "info": {
+    "name": "Library Management API",
+    "description": "Postman collection לפרויקט סיום קורס ASP.NET Core Web API - מערכת ניהול ספרייה. מכסה את כל פעולות ה-CRUD הנדרשות עבור Books, Members ו-Loans.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://localhost:7258/api" },
+    { "key": "bookId", "value": "1" },
+    { "key": "memberId", "value": "1" },
+    { "key": "loanId", "value": "1" },
+    { "key": "categoryId", "value": "1" },
+    { "key": "authorId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Get All Books",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Books", "host": ["{{baseUrl}}"], "path": ["Books"] }
+          }
+        },
+        {
+          "name": "Get Book By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Books/{{bookId}}", "host": ["{{baseUrl}}"], "path": ["Books", "{{bookId}}"] }
+          }
+        },
+        {
+          "name": "Search Books By Genre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/Books/search?genre=רומן",
+              "host": ["{{baseUrl}}"],
+              "path": ["Books", "search"],
+              "query": [{ "key": "genre", "value": "רומן" }]
+            }
+          }
+        },
+        {
+          "name": "Create Book",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"חיי אדם\",\n  \"isbn\": \"978-965-00-9999-1\",\n  \"copiesTotal\": 5,\n  \"publicationYear\": 2020,\n  \"genre\": \"רומן\",\n  \"categoryId\": {{categoryId}},\n  \"authorIds\": [{{authorId}}]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Books", "host": ["{{baseUrl}}"], "path": ["Books"] }
+          }
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"חיי אדם - מהדורה מעודכנת\",\n  \"isbn\": \"978-965-00-9999-1\",\n  \"copiesTotal\": 6,\n  \"publicationYear\": 2021,\n  \"genre\": \"רומן\",\n  \"categoryId\": {{categoryId}},\n  \"authorIds\": [{{authorId}}]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Books/{{bookId}}", "host": ["{{baseUrl}}"], "path": ["Books", "{{bookId}}"] }
+          }
+        },
+        {
+          "name": "Delete Book",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Books/{{bookId}}", "host": ["{{baseUrl}}"], "path": ["Books", "{{bookId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Members",
+      "item": [
+        {
+          "name": "Get All Members",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Members", "host": ["{{baseUrl}}"], "path": ["Members"] }
+          }
+        },
+        {
+          "name": "Get Member By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Members/{{memberId}}", "host": ["{{baseUrl}}"], "path": ["Members", "{{memberId}}"] }
+          }
+        },
+        {
+          "name": "Create Member",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"ישראל\",\n  \"lastName\": \"ישראלי\",\n  \"email\": \"israel@example.com\",\n  \"phoneNumber\": \"0501234567\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Members", "host": ["{{baseUrl}}"], "path": ["Members"] }
+          }
+        },
+        {
+          "name": "Update Member",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"ישראל\",\n  \"lastName\": \"כהן\",\n  \"email\": \"israel.cohen@example.com\",\n  \"phoneNumber\": \"0507654321\",\n  \"isActive\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Members/{{memberId}}", "host": ["{{baseUrl}}"], "path": ["Members", "{{memberId}}"] }
+          }
+        },
+        {
+          "name": "Delete Member",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Members/{{memberId}}", "host": ["{{baseUrl}}"], "path": ["Members", "{{memberId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Loans",
+      "item": [
+        {
+          "name": "Get All Loans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Loans", "host": ["{{baseUrl}}"], "path": ["Loans"] }
+          }
+        },
+        {
+          "name": "Get Loan By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Loans/{{loanId}}", "host": ["{{baseUrl}}"], "path": ["Loans", "{{loanId}}"] }
+          }
+        },
+        {
+          "name": "Create Loan",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": {{bookId}},\n  \"memberId\": {{memberId}},\n  \"loanPeriodDays\": 14\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Loans", "host": ["{{baseUrl}}"], "path": ["Loans"] }
+          }
+        },
+        {
+          "name": "Return Book",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Loans/{{loanId}}/return", "host": ["{{baseUrl}}"], "path": ["Loans", "{{loanId}}", "return"] }
+          }
+        },
+        {
+          "name": "Delete Loan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Loans/{{loanId}}", "host": ["{{baseUrl}}"], "path": ["Loans", "{{loanId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authors",
+      "item": [
+        {
+          "name": "Get All Authors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Authors", "host": ["{{baseUrl}}"], "path": ["Authors"] }
+          }
+        },
+        {
+          "name": "Get Author By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Authors/{{authorId}}", "host": ["{{baseUrl}}"], "path": ["Authors", "{{authorId}}"] }
+          }
+        },
+        {
+          "name": "Create Author",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"דוד\",\n  \"lastName\": \"גרוסמן\",\n  \"nationality\": \"ישראלי\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Authors", "host": ["{{baseUrl}}"], "path": ["Authors"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Categories", "host": ["{{baseUrl}}"], "path": ["Categories"] }
+          }
+        },
+        {
+          "name": "Get Category By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/Categories/{{categoryId}}", "host": ["{{baseUrl}}"], "path": ["Categories", "{{categoryId}}"] }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"שירה\",\n  \"description\": \"אסופות שירה\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/Categories", "host": ["{{baseUrl}}"], "path": ["Categories"] }
+          }
+        }
+      ]
+    }
+  ]
+}
