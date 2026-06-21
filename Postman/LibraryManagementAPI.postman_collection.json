@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Library Management API",
-    "description": "Postman collection לפרויקט סיום קורס ASP.NET Core Web API - מערכת ניהול ספרייה. מכסה את כל פעולות ה-CRUD הנדרשות עבור Books, Members ו-Loans.",
+    "description": "Postman collection לפרויקט סיום קורס ASP.NET Core Web API - מערכת ניהול ספרייה. עדכנו את baseUrl לפי הפורט שמופיע בשורת Now listening on בהרצה (ברירת מחדל: https://localhost:7258/api).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [

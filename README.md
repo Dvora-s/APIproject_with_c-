@@ -58,6 +58,8 @@
 
 5. **הרצת הפרויקט** – הגדירו את `Library.API` כ-Startup Project והריצו (F5). הדפדפן ייפתח אוטומטית עם Swagger UI בכתובת השורש.
 
+   **טיפ:** אם הדפדפן לא נפתח, בדקו בחלון ה-CMD את השורה `Now listening on:` והשתמשו בכתובת המדויקת (למשל `http://localhost:5000` או `https://localhost:7258`).
+
 ### בדיקת ה-API
 - **Swagger UI**: נפתח אוטומטית בסביבת Development בכתובת הבסיס (`https://localhost:7258/`).
 - **Postman**: ייבאו את הקובץ `Postman/LibraryManagementAPI.postman_collection.json` ועדכנו את המשתנה `baseUrl` בהתאם לפורט שבו רץ הפרויקט אצלכם.
