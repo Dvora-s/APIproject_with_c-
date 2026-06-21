@@ -32,7 +32,7 @@
 
 3. **בדיקת מחרוזת החיבור** – בקובץ `Library.API/appsettings.json` מוגדרת מחרוזת חיבור ל-LocalDB:
    ```json
-   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;AttachDbFilename=|DataDirectory|\\LibraryDb.mdf;Database=LibraryDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+   "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=LibraryDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
    ```
    אם ברצונכם לעבוד מול SQL Server רגיל או MySQL, יש לעדכן כאן בלבד (לא בקוד) – ראו `בחירת_סוג_DB_לפרויקט.pdf`.
 
