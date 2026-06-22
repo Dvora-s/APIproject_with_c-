@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מדריך דרישות פרויקט – Library Management API</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --ok: #4ade80;
+      --warn: #fbbf24;
+      --border: #475569;
+      --code-bg: #0c1222;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a5f 0%, #312e81 100%);
+      padding: 2.5rem 2rem;
+      border-bottom: 3px solid var(--accent);
+    }
+    header h1 { font-size: 1.9rem; margin-bottom: 0.5rem; }
+    header p { color: #cbd5e1; max-width: 900px; }
+    .meta { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .badge.ok { background: rgba(74,222,128,0.15); border-color: var(--ok); color: var(--ok); }
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: calc(100vh - 180px);
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 1.5rem 1rem;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+    }
+    nav h2 { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    nav a {
+      display: block;
+      padding: 0.45rem 0.75rem;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      margin-bottom: 0.2rem;
+    }
+    nav a:hover { background: var(--surface2); color: var(--accent); }
+    main { padding: 2rem 2.5rem 4rem; }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      scroll-margin-top: 1rem;
+    }
+    section h2 {
+      color: var(--accent);
+      font-size: 1.35rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section h3 { color: var(--accent2); font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
+    p, li { color: #e2e8f0; }
+    ul, ol { margin: 0.5rem 1.5rem 1rem 0; }
+    .req-box {
+      background: var(--code-bg);
+      border-right: 4px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .req-box strong { color: var(--accent); }
+    .impl-box {
+      background: rgba(74,222,128,0.06);
+      border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .impl-box strong { color: var(--ok); }
+    .files {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.75rem 0;
+    }
+    .file-tag {
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      background: var(--surface2);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      color: #a5b4fc;
+      direction: ltr;
+      display: inline-block;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      direction: ltr;
+      text-align: left;
+      margin: 0.75rem 0;
+    }
+    code { font-family: Consolas, "Courier New", monospace; color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.8rem;
+      text-align: right;
+    }
+    th { background: var(--surface2); color: var(--accent); }
+    .flow {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      direction: ltr;
+      text-align: center;
+      color: #a5b4fc;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .diagram {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .layer {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .layer span { display: block; color: var(--muted); font-size: 0.75rem; margin-top: 0.25rem; }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      nav { position: static; height: auto; border-left: none; border-bottom: 1px solid var(--border); }
+      .diagram { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 מדריך דרישות פרויקט סיום – Library Management System</h1>
+  <p>
+    מסמך זה מסביר <strong>כל דרישה</strong> ממסמך הקורס "פרויקט סיום קורס C# תשפו"
+    ומראה <strong>איך היא ממומשת</strong> בפרויקט שלך – מערכת ניהול ספרייה ב-ASP.NET Core Web API.
+  </p>
+  <div class="meta">
+    <span class="badge ok">✔ כל הדרישות ממומשות</span>
+    <span class="badge">.NET 8</span>
+    <span class="badge">Entity Framework Core</span>
+    <span class="badge">SQL Server LocalDB</span>
+    <span class="badge">GitHub: Build_server_with_c-</span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav>
+    <h2>תוכן עניינים</h2>
+    <a href="#overview">סקירה כללית</a>
+    <a href="#req1">1. נושא הפרויקט</a>
+    <a href="#req2">2. ארכיטקטורת שכבות</a>
+    <a href="#req3">3. מסד נתונים ו-EF Core</a>
+    <a href="#req4">4. ישויות וקשרים</a>
+    <a href="#req5">5. Controllers ו-CRUD</a>
+    <a href="#req6">6. פרמטרים (Route/Query/Body)</a>
+    <a href="#req7">7. DTOs ו-AutoMapper</a>
+    <a href="#req8">8. Repository + Unit of Work</a>
+    <a href="#req9">9. Dependency Injection</a>
+    <a href="#req10">10. Validation</a>
+    <a href="#req11">11. טיפול שגיאות גלובלי</a>
+    <a href="#req12">12. Logging</a>
+    <a href="#req13">13. פעולות אסינכרוניות</a>
+    <a href="#req14">14. לוגיקה עסקית</a>
+    <a href="#req15">15. קודי סטטוס HTTP</a>
+    <a href="#req16">16. Swagger</a>
+    <a href="#req17">17. Postman</a>
+    <a href="#req18">18. README ותיעוד</a>
+    <a href="#req19">19. Git</a>
+    <a href="#summary">טבלת סיכום</a>
+  </nav>
+
+  <main>
+
+    <section id="overview">
+      <h2>סקירה כללית – איך הפרויקט עובד?</h2>
+      <p>
+        הפרויקט הוא <strong>Web API</strong> לניהול ספרייה: ספרים, מחברים, קטגוריות, חברי ספרייה והשאלות.
+        כל בקשה מגיעה מהדפדפן (Swagger), Postman או כל לקוח HTTP, עוברת דרך שכבות, ומגיעה למסד הנתונים.
+      </p>
+      <div class="flow">
+        Client (Swagger/Postman) → Controller → Service → UnitOfWork → Repository → DbContext → SQL Server
+      </div>
+      <div class="diagram">
+        <div class="layer"><strong>Library.API</strong><span>Controllers, Middleware</span></div>
+        <div class="layer"><strong>Library.BusinessLogic</strong><span>Services, DTOs, Mapping</span></div>
+        <div class="layer"><strong>Library.DataAccess</strong><span>DbContext, Repositories</span></div>
+        <div class="layer"><strong>Library.Models</strong><span>Entities (טבלאות DB)</span></div>
+      </div>
+      <p>כל שכבה מדברת רק עם השכבה שמתחתיה – זה מבטיח קוד מסודר, ניתן לבדיקה, וקל לתחזוקה.</p>
+    </section>
+
+    <!-- 1 -->
+    <section id="req1">
+      <h2>דרישה 1 – נושא הפרויקט (Web API מקורי)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> לפתח מערכת Web API ב-ASP.NET Core על נושא מקורי, עם לוגיקה עסקית אמיתית (לא רק CRUD פשוט).
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <p>נבחרה מערכת <strong>ניהול ספרייה</strong> עם לוגיקה עסקית מלאה:</p>
+        <ul>
+          <li>השאלת ספר – בודק שיש עותקים זמינים ושהחבר פעיל</li>
+          <li>החזרת ספר – מעדכן אוטומטית את מלאי העותקים</li>
+          <li>מניעת מחיקת ספר/חבר עם השאלות פעילות</li>
+          <li>ISBN ואימייל ייחודיים במערכת</li>
+        </ul>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.BusinessLogic/Services/LoanService.cs</span>
+        <span class="file-tag">Library.BusinessLogic/Services/BookService.cs</span>
+        <span class="file-tag">Library.BusinessLogic/Services/MemberService.cs</span>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section id="req2">
+      <h2>דרישה 2 – ארכיטקטורת שכבות (N-Tier / Layered Architecture)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> הפרויקט חייב להיות מחולק ללפחות 3–4 שכבות נפרדות (פרויקטים נפרדים ב-Solution), כאשר כל שכבה אחראית על תחום אחר.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong> 4 פרויקטים ב-<code>LibrarySystem.sln</code>:
+        <table>
+          <tr><th>שכבה</th><th>פרויקט</th><th>תפקיד</th></tr>
+          <tr><td>Presentation (API)</td><td>Library.API</td><td>Controllers, Middleware, Program.cs, Swagger</td></tr>
+          <tr><td>Business Logic</td><td>Library.BusinessLogic</td><td>Services, DTOs, AutoMapper, חוקים עסקיים</td></tr>
+          <tr><td>Data Access</td><td>Library.DataAccess</td><td>DbContext, Repositories, Unit of Work, Migrations</td></tr>
+          <tr><td>Models / Entities</td><td>Library.Models</td><td>מחלקות Entity (מבנה הטבלאות)</td></tr>
+        </table>
+        <p><strong>חשוב:</strong> ה-Controller לא נוגע ישירות ב-DbContext או ב-Entities – רק ב-Services.</p>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section id="req3">
+      <h2>דרישה 3 – מסד נתונים, Entity Framework Core ומחרוזת חיבור</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong>
+        <ul>
+          <li>שימוש ב-Entity Framework Core בגישת <strong>Code First</strong></li>
+          <li>Migrations ליצירת/עדכון הטבלאות</li>
+          <li>מחרוזת החיבור <strong>רק</strong> ב-<code>appsettings.json</code> – לא בקוד!</li>
+          <li>תמיכה ב-SQL Server / LocalDB</li>
+        </ul>
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li><code>LibraryDbContext</code> מגדיר את כל הטבלאות והקשרים</li>
+          <li>Migration בשם <code>InitialCreate</code> בתיקיית Migrations</li>
+          <li>בהרצה – <code>dbContext.Database.Migrate()</code> מעדכן את ה-DB אוטומטית</li>
+          <li>סקריפט SQL חלופי: <code>DB/CreateDatabase.sql</code></li>
+        </ul>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.API/appsettings.json</span>
+        <span class="file-tag">Library.API/Program.cs</span>
+        <span class="file-tag">Library.DataAccess/Data/LibraryDbContext.cs</span>
+        <span class="file-tag">Library.DataAccess/Migrations/</span>
+      </div>
+      <pre><code>// Program.cs – מחרוזת החיבור נטענת רק מ-Configuration (סעיף 3 בדרישות)
+builder.Services.AddDbContext&lt;LibraryDbContext&gt;(options =&gt;
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));</code></pre>
+      <pre><code>// appsettings.json
+"DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=LibraryDb;Trusted_Connection=True;..."</code></pre>
+    </section>
+
+    <!-- 4 -->
+    <section id="req4">
+      <h2>דרישה 4 – ישויות (Entities) וקשרים בין טבלאות</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> לפחות 4–5 ישויות, כולל:
+        <ul>
+          <li><strong>Many-to-One</strong> – הרבה ספרים → קטגוריה אחת</li>
+          <li><strong>Many-to-Many</strong> – ספרים ↔ מחברים (דרך טבלת קשר)</li>
+          <li><strong>One-to-Many</strong> – חבר → השאלות רבות</li>
+        </ul>
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong> 6 ישויות:
+        <table>
+          <tr><th>ישות</th><th>קשרים</th></tr>
+          <tr><td>Book</td><td>Many-to-One → Category, Many-to-Many → Author, One-to-Many → Loan</td></tr>
+          <tr><td>Author</td><td>Many-to-Many → Book (דרך BookAuthor)</td></tr>
+          <tr><td>Category</td><td>One-to-Many → Books</td></tr>
+          <tr><td>Member</td><td>One-to-Many → Loans</td></tr>
+          <tr><td>Loan</td><td>Many-to-One → Book, Many-to-One → Member</td></tr>
+          <tr><td>BookAuthor</td><td>טבלת Join למימוש Many-to-Many</td></tr>
+        </table>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.Models/Entities/</span>
+        <span class="file-tag">Library.DataAccess/Data/LibraryDbContext.cs → OnModelCreating</span>
+      </div>
+      <pre><code>// Many-to-Many: Book &lt;-&gt; Author דרך BookAuthor
+modelBuilder.Entity&lt;BookAuthor&gt;().HasKey(ba =&gt; new { ba.BookId, ba.AuthorId });
+
+// Many-to-One: Book -&gt; Category
+modelBuilder.Entity&lt;Book&gt;()
+    .HasOne(b =&gt; b.Category).WithMany(c =&gt; c.Books)
+    .HasForeignKey(b =&gt; b.CategoryId);</code></pre>
+    </section>
+
+    <!-- 5 -->
+    <section id="req5">
+      <h2>דרישה 5 – Controllers ופעולות CRUD</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> Controllers עם פעולות CRUD מלאות (Create, Read, Update, Delete) לישויות המרכזיות.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <table>
+          <tr><th>Controller</th><th>GET</th><th>POST</th><th>PUT</th><th>DELETE</th></tr>
+          <tr><td>BooksController</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td></tr>
+          <tr><td>MembersController</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td></tr>
+          <tr><td>LoansController</td><td>✔</td><td>✔</td><td>✔ (החזרה)</td><td>✔</td></tr>
+          <tr><td>AuthorsController</td><td>✔</td><td>✔</td><td>—</td><td>—</td></tr>
+          <tr><td>CategoriesController</td><td>✔</td><td>✔</td><td>—</td><td>—</td></tr>
+        </table>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.API/Controllers/BooksController.cs</span>
+        <span class="file-tag">Library.API/Controllers/MembersController.cs</span>
+        <span class="file-tag">Library.API/Controllers/LoansController.cs</span>
+        <span class="file-tag">Library.API/Controllers/LookupControllers.cs</span>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section id="req6">
+      <h2>דרישה 6 – סוגי פרמטרים (Route, Query, Body)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> להדגים קבלת פרמטרים משלושה מקורות:
+        <ul>
+          <li><strong>Route</strong> – מזהה בכתובת, למשל <code>/api/Books/5</code></li>
+          <li><strong>Query</strong> – פרמטרים אחרי ?, למשל <code>?genre=רומן</code></li>
+          <li><strong>Body</strong> – JSON בגוף הבקשה ב-POST/PUT</li>
+        </ul>
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <pre><code>// Route Parameter
+[HttpGet("{id:int}")]
+public async Task&lt;ActionResult&lt;BookDto&gt;&gt; GetById([FromRoute] int id)
+
+// Query Parameter
+[HttpGet("search")]
+public async Task&lt;ActionResult&gt; SearchByGenre([FromQuery] string? genre)
+
+// Body Parameter
+[HttpPost]
+public async Task&lt;ActionResult&lt;BookDto&gt;&gt; Create([FromBody] CreateBookDto dto)</code></pre>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section id="req7">
+      <h2>דרישה 7 – DTOs ו-AutoMapper</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong>
+        <ul>
+          <li>לא לחשוף ישירות את ה-Entities ללקוח (API)</li>
+          <li>להשתמש ב-DTOs (Data Transfer Objects) נפרדים לקריאה, יצירה ועדכון</li>
+          <li>מיפוי אוטומטי בין Entity ל-DTO באמצעות AutoMapper</li>
+        </ul>
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li><code>BookDto</code>, <code>CreateBookDto</code>, <code>UpdateBookDto</code> – לספרים</li>
+          <li><code>MemberDto</code>, <code>CreateMemberDto</code>, <code>UpdateMemberDto</code> – לחברים</li>
+          <li><code>LoanDto</code>, <code>CreateLoanDto</code> – להשאלות</li>
+          <li><code>MappingProfile</code> – ממפה Entity ↔ DTO, כולל שדות מחושבים (שם מחבר, כותרת ספר)</li>
+        </ul>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.BusinessLogic/DTOs/</span>
+        <span class="file-tag">Library.BusinessLogic/Mapping/MappingProfile.cs</span>
+        <span class="file-tag">Library.API/Program.cs → AddAutoMapper</span>
+      </div>
+      <pre><code>// MappingProfile – ממפה Book ל-BookDto עם שם קטגוריה ושמות מחברים
+CreateMap&lt;Book, BookDto&gt;()
+    .ForMember(dest =&gt; dest.CategoryName, opt =&gt; opt.MapFrom(src =&gt; src.Category.Name))
+    .ForMember(dest =&gt; dest.AuthorNames, opt =&gt; opt.MapFrom(src =&gt;
+        src.BookAuthors.Select(ba =&gt; ba.Author.FirstName + " " + ba.Author.LastName)));</code></pre>
+    </section>
+
+    <!-- 8 -->
+    <section id="req8">
+      <h2>דרישה 8 – Repository Pattern ו-Unit of Work</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong>
+        <ul>
+          <li><strong>Generic Repository</strong> – פעולות CRUD גנריות לכל ישות</li>
+          <li><strong>Repository ייעודי</strong> – לשאילתות מורכבות (למשל Include)</li>
+          <li><strong>Unit of Work</strong> – נקודה אחת ל-SaveChanges לכל פעולה עסקית</li>
+        </ul>
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li><code>IGenericRepository&lt;T&gt;</code> + <code>GenericRepository&lt;T&gt;</code></li>
+          <li><code>IBookRepository</code> – <code>GetByIdWithDetailsAsync</code>, <code>IsbnExistsAsync</code></li>
+          <li><code>IMemberRepository</code> – <code>EmailExistsAsync</code>, <code>GetByIdWithLoansAsync</code></li>
+          <li><code>IUnitOfWork</code> – מאגד את כל ה-Repositories + <code>SaveChangesAsync()</code></li>
+        </ul>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.DataAccess/Interfaces/</span>
+        <span class="file-tag">Library.DataAccess/Repositories/</span>
+      </div>
+      <pre><code>// UnitOfWork – גישה מרוכזת לכל ה-Repositories
+public IBookRepository Books =&gt; _books ??= new BookRepository(_context);
+public async Task&lt;int&gt; SaveChangesAsync() =&gt; await _context.SaveChangesAsync();</code></pre>
+    </section>
+
+    <!-- 9 -->
+    <section id="req9">
+      <h2>דרישה 9 – Dependency Injection (הזרקת תלויות)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> כל השירותים וה-Repositories נרשמים ב-DI Container ומוזרקים דרך Constructor – לא נוצרים עם <code>new</code> בקונטרולר.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong> ב-<code>Program.cs</code>:
+        <pre><code>builder.Services.AddScoped&lt;IUnitOfWork, UnitOfWork&gt;();
+builder.Services.AddScoped&lt;IBookService, BookService&gt;();
+builder.Services.AddScoped&lt;IMemberService, MemberService&gt;();
+builder.Services.AddScoped&lt;ILoanService, LoanService&gt;();
+// ... ועוד</code></pre>
+        <p>ה-Controller מקבל את השירות דרך Constructor:</p>
+        <pre><code>public BooksController(IBookService bookService, ILogger&lt;BooksController&gt; logger)
+{
+    _bookService = bookService;
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="req10">
+      <h2>דרישה 10 – Validation (אימות קלט)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> אימות נתונים לפני עיבוד – שדות חובה, אורך מקסימלי, טווח ערכים, פורמט אימייל.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li><strong>Data Annotations</strong> על ה-DTOs: <code>[Required]</code>, <code>[MaxLength]</code>, <code>[Range]</code>, <code>[EmailAddress]</code></li>
+          <li>ב-Controller: <code>if (!ModelState.IsValid) return BadRequest(ModelState);</code></li>
+          <li>חוקים עסקיים (ISBN כפול, אין עותקים) – ב-Service Layer</li>
+        </ul>
+      </div>
+      <pre><code>// CreateBookDto
+[Required(ErrorMessage = "כותרת הספר היא שדה חובה")]
+[MaxLength(200)]
+public string Title { get; set; }
+
+[Range(1, 9999, ErrorMessage = "מספר עותקים חייב להיות בין 1 ל-9999")]
+public int CopiesTotal { get; set; }</code></pre>
+    </section>
+
+    <!-- 11 -->
+    <section id="req11">
+      <h2>דרישה 11 – טיפול שגיאות גלובלי (Middleware)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> (סעיף 8 במסמך הדרישות)
+        <ul>
+          <li>Middleware מרכזי שתופס כל חריגה לא מטופלת</li>
+          <li>מחזיר תשובת JSON אחידה עם קוד סטטוס מתאים</li>
+          <li>לא לחשוף Stack Trace ללקוח</li>
+          <li>המערכת לא קורסת – ממשיכה לעבוד אחרי שגיאה</li>
+        </ul>
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong> <code>ExceptionHandlingMiddleware</code>:
+        <table>
+          <tr><th>סוג חריגה</th><th>קוד HTTP</th></tr>
+          <tr><td>NotFoundException</td><td>404 Not Found</td></tr>
+          <tr><td>BusinessRuleException</td><td>400 Bad Request</td></tr>
+          <tr><td>ArgumentException</td><td>400 Bad Request</td></tr>
+          <tr><td>כל שאר השגיאות</td><td>500 + הודעה כללית (ללא פרטים פנימיים)</td></tr>
+        </table>
+      </div>
+      <div class="files">
+        <span class="file-tag">Library.API/Middleware/ExceptionHandlingMiddleware.cs</span>
+        <span class="file-tag">Library.BusinessLogic/Exceptions/</span>
+      </div>
+      <pre><code>// Program.cs – חייב להיות ראשון בצינור!
+app.UseGlobalExceptionHandling();</code></pre>
+    </section>
+
+    <!-- 12 -->
+    <section id="req12">
+      <h2>דרישה 12 – Logging (רישום לוגים)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> רישום פעולות מרכזיות ושגיאות באמצעות מנגנון Logging מובנה של .NET.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li>הגדרה ב-<code>Program.cs</code>: Console + Debug providers</li>
+          <li><code>ILogger&lt;T&gt;</code> מוזרק ל-Services ול-Middleware</li>
+          <li>דוגמאות: יצירת ספר, השאלה, החזרה, שגיאות</li>
+        </ul>
+      </div>
+      <pre><code>_logger.LogInformation("נוצרה השאלה חדשה: ספר {BookId} לחבר {MemberId}", dto.BookId, dto.MemberId);
+_logger.LogError(exception, "שגיאה לא צפויה בעת טיפול בבקשה {Path}", context.Request.Path);</code></pre>
+    </section>
+
+    <!-- 13 -->
+    <section id="req13">
+      <h2>דרישה 13 – פעולות אסינכרוניות (async/await)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> (סעיף a.7 במסמך הדרישות) – כל הגישה למסד הנתונים חייבת להיות אסינכרונית עם <code>async</code>/<code>await</code>.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li>כל מתודות ה-Repository: <code>GetByIdAsync</code>, <code>AddAsync</code>, <code>SaveChangesAsync</code></li>
+          <li>כל מתודות ה-Service: <code>GetAllBooksAsync</code>, <code>CreateLoanAsync</code> וכו'</li>
+          <li>כל ה-Controllers: <code>public async Task&lt;ActionResult&gt; ...</code></li>
+        </ul>
+      </div>
+      <pre><code>// GenericRepository
+public async Task&lt;T?&gt; GetByIdAsync(int id)
+{
+    return await _dbSet.FindAsync(id);
+}</code></pre>
+    </section>
+
+    <!-- 14 -->
+    <section id="req14">
+      <h2>דרישה 14 – לוגיקה עסקית (Business Rules)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> חוקים עסקיים בשכבת ה-Service – לא ב-Controller ולא ב-Repository.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <table>
+          <tr><th>חוק</th><th>איפה</th></tr>
+          <tr><td>ISBN חייב להיות ייחודי</td><td>BookService.CreateBookAsync</td></tr>
+          <tr><td>אימייל חייב להיות ייחודי</td><td>MemberService.CreateMemberAsync</td></tr>
+          <tr><td>חבר לא פעיל לא יכול להשאיל</td><td>LoanService.CreateLoanAsync</td></tr>
+          <tr><td>אין עותקים זמינים – לא ניתן להשאיל</td><td>LoanService.CreateLoanAsync</td></tr>
+          <tr><td>החזרה מעדכנת CopiesAvailable +1</td><td>LoanService.ReturnBookAsync</td></tr>
+          <tr><td>לא ניתן למחוק ספר עם השאלות פעילות</td><td>BookService.DeleteBookAsync</td></tr>
+          <tr><td>לא ניתן למחוק חבר עם השאלות פעילות</td><td>MemberService.DeleteMemberAsync</td></tr>
+          <tr><td>לא ניתן להקטין עותקים מתחת למושאלים</td><td>BookService.UpdateBookAsync</td></tr>
+        </table>
+        <p>הפרה של חוק → זריקת <code>BusinessRuleException</code> → Middleware מחזיר 400.</p>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section id="req15">
+      <h2>דרישה 15 – קודי סטטוס HTTP נכונים</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> החזרת קוד סטטוס HTTP מתאים לכל תרחיש.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <table>
+          <tr><th>מצב</th><th>קוד</th><th>דוגמה</th></tr>
+          <tr><td>הצלחה – שליפה</td><td>200 OK</td><td>GET /api/Books</td></tr>
+          <tr><td>נוצר בהצלחה</td><td>201 Created</td><td>POST /api/Members</td></tr>
+          <tr><td>עודכן/נמחק ללא תוכן</td><td>204 No Content</td><td>PUT /api/Books/1</td></tr>
+          <tr><td>קלט לא תקין / חוק עסקי</td><td>400 Bad Request</td><td>השאלה ללא עותקים</td></tr>
+          <tr><td>לא נמצא</td><td>404 Not Found</td><td>GET /api/Books/999</td></tr>
+          <tr><td>שגיאת שרת</td><td>500 Internal Server Error</td><td>חריגה לא צפויה</td></tr>
+        </table>
+        <p>מוגדר גם עם <code>[ProducesResponseType]</code> לתיעוד ב-Swagger.</p>
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section id="req16">
+      <h2>דרישה 16 – Swagger (תיעוד API אינטראקטיבי)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> שימוש ב-Swagger UI לתיעוד ובדיקת ה-API ישירות מהדפדפן.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li>חבילת <code>Swashbuckle.AspNetCore</code></li>
+          <li>הגדרה ב-<code>Program.cs</code> עם כותרת ותיאור בעברית</li>
+          <li>Swagger UI בכתובת השורש בסביבת Development</li>
+          <li>כתובת: <code>http://localhost:5000</code> או <code>https://localhost:7258</code></li>
+        </ul>
+      </div>
+      <pre><code>app.UseSwagger();
+app.UseSwaggerUI(options =&gt; {
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Library Management API v1");
+    options.RoutePrefix = string.Empty; // Swagger בכתובת השורש
+});</code></pre>
+    </section>
+
+    <!-- 17 -->
+    <section id="req17">
+      <h2>דרישה 17 – Postman Collection</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> קובץ Postman עם בקשות מוכנות לבדיקת כל ה-endpoints.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <p>קובץ <code>Postman/LibraryManagementAPI.postman_collection.json</code> הכולל:</p>
+        <ul>
+          <li>Books – CRUD + חיפוש לפי ז'אנר</li>
+          <li>Members – CRUD</li>
+          <li>Loans – יצירה, החזרה, מחיקה</li>
+          <li>Authors, Categories – שליפה ויצירה</li>
+          <li>משתנה <code>baseUrl</code> – לעדכון לפי הפורט בהרצה</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 18 -->
+    <section id="req18">
+      <h2>דרישה 18 – README ותיעוד</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> קובץ README עם: תיאור המערכת, הוראות התקנה והרצה, תיאור ישויות, מבנה שכבות.
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong> <code>README.md</code> בשורש הפרויקט – כולל את כל הסעיפים הנ"ל + הוראות Migrations ו-Postman.
+      </div>
+      <p>בנוסף – מסמך זה (<code>Docs/דרישות-פרויקט.html</code>) מסביר כל דרישה לעומק.</p>
+    </section>
+
+    <!-- 19 -->
+    <section id="req19">
+      <h2>דרישה 19 – Git (בקרת גרסאות)</h2>
+      <div class="req-box">
+        <strong>מה נדרש?</strong> הפרויקט ב-GitHub עם היסטוריית commits (מומלץ לפחות 10 קומיטים).
+      </div>
+      <div class="impl-box">
+        <strong>איך ממומש אצלך?</strong>
+        <ul>
+          <li>ריפו: <a href="https://github.com/Dvora-s/Build_server_with_c-" style="color:var(--accent)">github.com/Dvora-s/Build_server_with_c-</a></li>
+          <li>10+ commits עם הודעות ברורות (feat, fix, docs, chore)</li>
+          <li><code>.gitignore</code> – bin, obj, .vs לא נכנסים לריפו</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <section id="summary">
+      <h2>טבלת סיכום – כל הדרישות</h2>
+      <table>
+        <tr><th>#</th><th>דרישה</th><th>סטטוס</th><th>מיקום עיקרי</th></tr>
+        <tr><td>1</td><td>נושא Web API מקורי</td><td style="color:var(--ok)">✔</td><td>כל הפרויקט</td></tr>
+        <tr><td>2</td><td>ארכיטקטורת 4 שכבות</td><td style="color:var(--ok)">✔</td><td>LibrarySystem.sln</td></tr>
+        <tr><td>3</td><td>EF Core + Migrations + Connection String</td><td style="color:var(--ok)">✔</td><td>DataAccess, appsettings.json</td></tr>
+        <tr><td>4</td><td>6 ישויות + קשרים</td><td style="color:var(--ok)">✔</td><td>Library.Models, DbContext</td></tr>
+        <tr><td>5</td><td>CRUD מלא</td><td style="color:var(--ok)">✔</td><td>Controllers</td></tr>
+        <tr><td>6</td><td>Route / Query / Body</td><td style="color:var(--ok)">✔</td><td>BooksController</td></tr>
+        <tr><td>7</td><td>DTOs + AutoMapper</td><td style="color:var(--ok)">✔</td><td>BusinessLogic/DTOs</td></tr>
+        <tr><td>8</td><td>Repository + Unit of Work</td><td style="color:var(--ok)">✔</td><td>DataAccess/Repositories</td></tr>
+        <tr><td>9</td><td>Dependency Injection</td><td style="color:var(--ok)">✔</td><td>Program.cs</td></tr>
+        <tr><td>10</td><td>Validation</td><td style="color:var(--ok)">✔</td><td>DTOs + Controllers</td></tr>
+        <tr><td>11</td><td>Exception Middleware</td><td style="color:var(--ok)">✔</td><td>ExceptionHandlingMiddleware</td></tr>
+        <tr><td>12</td><td>Logging</td><td style="color:var(--ok)">✔</td><td>Services, Program.cs</td></tr>
+        <tr><td>13</td><td>async/await</td><td style="color:var(--ok)">✔</td><td>כל השכבות</td></tr>
+        <tr><td>14</td><td>לוגיקה עסקית</td><td style="color:var(--ok)">✔</td><td>Services</td></tr>
+        <tr><td>15</td><td>קודי HTTP</td><td style="color:var(--ok)">✔</td><td>Controllers + Middleware</td></tr>
+        <tr><td>16</td><td>Swagger</td><td style="color:var(--ok)">✔</td><td>Program.cs</td></tr>
+        <tr><td>17</td><td>Postman</td><td style="color:var(--ok)">✔</td><td>Postman/</td></tr>
+        <tr><td>18</td><td>README</td><td style="color:var(--ok)">✔</td><td>README.md</td></tr>
+        <tr><td>19</td><td>Git</td><td style="color:var(--ok)">✔</td><td>GitHub</td></tr>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Library Management System – מדריך דרישות פרויקט סיום קורס C# תשפו<br>
+  נוצר עבור Dvora-s | Build_server_with_c-
+</footer>
+
+</body>
+</html>
